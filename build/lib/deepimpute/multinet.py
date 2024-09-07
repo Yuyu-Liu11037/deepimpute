@@ -14,6 +14,7 @@ from keras.callbacks import EarlyStopping
 import keras.losses
 
 import tensorflow as tf
+from keras.utils import register_keras_serializable
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -33,6 +34,7 @@ def get_distance_matrix(raw, n_pred=None):
                                      columns=potential_pred).fillna(0)
     return covariance_matrix
 
+@register_keras_serializable()
 def wMSE(y_true, y_pred, binary=False):
     if binary:
         weights = tf.cast(y_true>0, tf.float32)
@@ -111,7 +113,7 @@ class MultiNet:
             json_file.write(model_json)
             
         # serialize weights to HDF5
-        model.save_weights("{}/model.h5".format(self.outputdir))
+        model.save_weights("{}/model.weights.h5".format(self.outputdir))
         print("Saved model to disk in {}".format(self.outputdir))
 
     def load(self):
@@ -119,7 +121,7 @@ class MultiNet:
         loaded_model_json = json_file.read()
         json_file.close()
         model = model_from_json(loaded_model_json)
-        model.load_weights('{}/model.h5'.format(self.outputdir))
+        model.load_weights('{}/model.weights.h5'.format(self.outputdir))
 
         return model
         
@@ -161,7 +163,7 @@ class MultiNet:
                 print('Unknown loss: {}. Aborting.'.format(loss))
                 exit(1)
 
-        model.compile(optimizer=keras.optimizers.Adam(lr=self.NN_parameters['learning_rate']),
+        model.compile(optimizer=keras.optimizers.Adam(learning_rate=self.NN_parameters['learning_rate']),
                       loss=loss)
 
         return model
