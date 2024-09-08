@@ -38,8 +38,8 @@ def purity_score(y_true, y_pred):
 
 
 def calculate_mae_rmse(imputed, ground_truth, mask):
-    imputed_values = imputed[mask].detach().cpu().numpy()
-    ground_truth_values = ground_truth[mask].detach().cpu().numpy()
+    imputed_values = imputed[mask]
+    ground_truth_values = ground_truth[mask]
     
     mae = mean_absolute_error(ground_truth_values, imputed_values)
     rmse = sqrt(mean_squared_error(ground_truth_values, imputed_values))
@@ -101,7 +101,7 @@ def gumbel_sinkhorn(X, tau=1.0, n_iter=20, epsilon=1e-6):
 
 
 def calculate_cluster_labels(X, resolution=0.65):
-    adata = ad.AnnData(X.detach().cpu().numpy())
+    adata = ad.AnnData(X)
     sc.pp.pca(adata)
     sc.pp.neighbors(adata, use_rep="X_pca")
     sc.tl.leiden(adata, resolution=resolution, flavor="igraph", n_iterations=2)
