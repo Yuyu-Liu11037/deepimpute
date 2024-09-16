@@ -1,40 +1,10 @@
 # DeepImpute: an accurate and efficient deep learning method for single-cell RNA-seq data imputation
-
-[![Build Status](https://travis-ci.org/lanagarmire/deepimpute.svg?branch=master)](https://travis-ci.org/lanagarmire/deepimpute)
-
-Arisdakessian, Cedric, Olivier Poirion, Breck Yunits, Xun Zhu, and Lana Garmire.  
-"DeepImpute: an accurate, fast and scalable deep neural network method to impute single-cell RNA-Seq data.", *Genome biology* 20.1 (2019): 211"
-https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1837-6?fbclid=IwAR2wkwBbp_rQBv0muKEYlt-MDZGlJF6sej1sbKJOP58jvXX1XdD98aGuauo
-
-DeepImpute has been implemented in Python2 and Python3. The recommended version is Python3.
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine.
-
-### Installing
-
-You can install DeepImpute's latest release using pip with the following command:
-
-```bash
-pip install deepimpute
+### Enviroment
 ```
-
-To install the latest GitHub version, you can also clone this directory and
-install it: 
-
-```bash
-git clone https://github.com/lanagarmire/deepimpute
-cd deepimpute
-pip install --user .
+conda env create -f environment.yml
 ```
 
 ### Usage
-
-DeepImpute can be used either on the command line or as a Python package.
-
-Command line:
-
 ```
 usage: deepImpute [-h] [-o OUTPUT] [--cores CORES]
                   [--cell-axis {rows,columns}] [--limit LIMIT]
@@ -88,20 +58,11 @@ optional arguments:
                         Default: restore
 ```
 
-Python package:
+Python:
 
 ```python
-from deepimpute.multinet import MultiNet
-
-data = pd.read_csv('examples/test.csv', index_col=0) # dimension = (cells x genes)
-model = MultiNet()
-model.fit(data)
-imputed = model.predict(data)
+python -m deepimpute.deepImpute /workspace/deepimpute/data/citeseq_processed.csv --output ./data/citese
+q_imputed.csv --limit 2000
 ```
-
-A more detailed usage of deepImpute's functionality is available in the iPython Notebook notebook_example.ipynb
-
-### Running the tests
-
-Each file has been validated using a unittest script. They are all available in the test folder.
-To run all the tests at once, you can also use the makefile by running `make test`.
+### Remark
+The authors used log1p and reversal in their own code, which is confusing (when calculating pcc, mae, rmse: notice comparing raw data or log-transformed data).

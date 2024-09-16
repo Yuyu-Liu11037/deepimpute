@@ -316,8 +316,10 @@ class MultiNet:
                     threshold,
                     NN_lim=None
     ):
-        if not str(NN_lim).isdigit():
+        if not NN_lim.isdigit():
             NN_lim = (gene_metric > threshold).sum()
+        else:
+            NN_lim = int(NN_lim)
 
         n_subsets = int(np.ceil(NN_lim / self.sub_outputdim))
         genes_to_impute = gene_metric.index[:n_subsets*self.sub_outputdim]

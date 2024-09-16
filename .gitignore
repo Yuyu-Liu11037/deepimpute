@@ -13,4 +13,4 @@ run
 .tox/
 .ipynb_checkpoints
 ignore/
-**/*data*/
+data/
