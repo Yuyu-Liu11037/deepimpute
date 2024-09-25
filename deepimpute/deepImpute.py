@@ -1,5 +1,5 @@
 import pandas as pd
-
+import time
 from deepimpute.parser import parse_args
 from deepimpute.multinet import MultiNet
 from tqdm import tqdm
@@ -40,11 +40,13 @@ def deepImpute(**kwargs):
     }
 
     multi = MultiNet(**NN_params)
+    start_time = time.time()
     print('train network')
     multi.fit(data, NN_lim=args.limit, cell_subset=args.subset, minVMR=args.minVMR, n_pred=args.n_pred)
 
     print('start impute')
     imputed = multi.predict(data, imputed_only=False, policy=args.policy)
+    print(f"Time usage: {time.time() - start_time:.2f}")
 
     if args.output is not None:
         with open(args.output, 'w') as f:
